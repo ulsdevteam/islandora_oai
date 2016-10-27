@@ -454,6 +454,8 @@ function islandora_oai_query_solr($start = 0, $field = 'PID', $query = NULL, $se
     module_load_include('inc', 'islandora_solr', 'includes/utilities');
     $query = $field . ':' . islandora_solr_lesser_escape($query);
   }
+  // Take into consideration the solr base filter.
+  $query .= (variable_get('islandora_solr_base_filter') ? ' AND ' . variable_get('islandora_solr_base_filter') : '');
   $query_processor->buildQuery($query);
 
   // Build the fields to return.
@@ -590,7 +592,8 @@ function islandora_oai_query_solr_for_child_sets($parent, &$sets = array()) {
 
   module_load_include('inc', 'islandora_solr', 'includes/utilities');
   $qp = new IslandoraSolrQueryProcessor();
-  $qp->buildQuery('*:*');
+  $qp->buildQuery('*:*' . (variable_get('islandora_solr_base_filter') ? ' AND ' . variable_get('islandora_solr_base_filter') : ''));
+
   $qp->solrParams['fl'] = 'PID';
   // Make sure we get everything but still filter on XACML permissions.
   $qp->solrParams['fq'] = array();
