@@ -61,8 +61,9 @@ EOQ;
         'limit' => $params['max_records'],
         'sort' => $label_field,
       );
-      $qp->buildQuery(format_string('!field:"info:fedora/islandora:collectionCModel"', array(
+      $qp->buildQuery(format_string('!field:"info:fedora/islandora:collectionCModel"!baseFilter', array(
         '!field' => variable_get('islandora_solr_content_model_field', 'RELS_EXT_hasModel_uri_ms'),
+        '!baseFilter' => (variable_get('islandora_solr_base_filter') ? ' AND ' . variable_get('islandora_solr_base_filter') : ''),
       )), $solr_params);
       $qp->solrStart = $params['token']->deliveredrecords;
       $qp->executeQuery(FALSE);
