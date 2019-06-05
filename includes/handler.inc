@@ -61,8 +61,9 @@ EOQ;
         'limit' => $params['max_records'],
         'sort' => $label_field,
       );
-      $qp->buildQuery(format_string('!field:"info:fedora/islandora:collectionCModel"', array(
+      $qp->buildQuery(format_string('!field:"info:fedora/islandora:collectionCModel"!baseFilter', array(
         '!field' => variable_get('islandora_solr_content_model_field', 'RELS_EXT_hasModel_uri_ms'),
+        '!baseFilter' => (variable_get('islandora_solr_base_filter') ? ' AND ' . variable_get('islandora_solr_base_filter') : ''),
       )), $solr_params);
       $qp->solrStart = $params['token']->deliveredrecords;
       $qp->executeQuery(FALSE);
@@ -456,6 +457,8 @@ function islandora_oai_query_solr($start = 0, $field = 'PID', $query = NULL, $se
   else {
     $query = $field . ':' . islandora_solr_lesser_escape($query);
   }
+  // Take into consideration the solr base filter.
+  $query .= (variable_get('islandora_solr_base_filter') ? ' AND ' . variable_get('islandora_solr_base_filter') : '');
   $query_processor->buildQuery($query);
 
   if (variable_get('islandora_oai_solr_remove_base_filters', FALSE)) {
@@ -598,7 +601,8 @@ function islandora_oai_query_solr_for_child_sets($parent, &$sets = array()) {
 
   module_load_include('inc', 'islandora_solr', 'includes/utilities');
   $qp = new IslandoraSolrQueryProcessor();
-  $qp->buildQuery('*:*');
+  $qp->buildQuery('*:*' . (variable_get('islandora_solr_base_filter') ? ' AND ' . variable_get('islandora_solr_base_filter') : ''));
+
   $qp->solrParams['fl'] = 'PID';
   // Make sure we get everything but still filter on XACML permissions.
   $qp->solrParams['fq'] = array();
