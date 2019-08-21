@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This module provides an implementation of a data provider according to the Open Archives Initiative Protocol for Metadata Harvesting (OAI-PMH) for an Islandora Fedora repository with a solr index. By implementing the islandora_oai module, you can expose content (its metadata) as an OAI-PMH repository. It will then be accessible by OAI harvesters. For further OAI documentation. For more info, please see [this]( http://www.openarchives.org/OAI/openarchivesprotocol.html) link.
+This module provides an implementation of a data provider according to the Open Archives Initiative Protocol for Metadata Harvesting (OAI-PMH) for an Islandora Fedora repository with a solr index. By implementing the islandora_oai module, you can expose content (its metadata) as an OAI-PMH repository. It will then be accessible by OAI harvesters. For further OAI documentation, please see [this]( http://www.openarchives.org/OAI/openarchivesprotocol.html) link.
 
 With this module you can: 
 
@@ -32,12 +32,12 @@ Configure the basic details of the repository in Administration » Islandora » 
 
 If you select "configure" you see the following screens:
 
-![Solr and content model config](https://cloud.githubusercontent.com/assets/4957043/19119122/be537f5a-8aec-11e6-9e47-12909df40a83.png)
+![Solr and content model config](https://user-images.githubusercontent.com/49278214/62641206-23efa000-b911-11e9-9daa-14493a7b85fe.png)
 
 * Solr date field - A datestamp to be appended to the metadata via the Solr index.
 * Solr RELS-EXT collection field - Fields entered here establish the object relationship of metadata to be passed on to the harvester.
-* Solr XACML role field - The site's Solr fields defining viewing permissions.
-* Solr hasModel field - The site's Solr field defining an object's content model.
+* Solr Content Model field - The site's Solr field defining an object's content model.
+* Remove base Solr filters - This option removes your configured Solr base filters from these queries. If you want your filters to be applied even though they could affect which objects are returned in the OAI results, uncheck this option. For example, if your Solr base filters exclude collection objects, these objects will not be returned in your OAI results unless you check this box.
 * Exclude Content Models - A list of content models, defined by their PID, to exclude from harvests. - if you exclude the collection content model, it disables the use of "sets" in OAi, as the name of the set is made by taking the PID of the collection and replacing the colon with an underscore.
 * Exclude objects within the "islandora" namespace
 * Append on dc.identifier.thumbnail to OAI_DC requests? - this only has an effect on OAI_DC output.
@@ -59,8 +59,8 @@ Some example requests are as follows:
 * `*/oai2?verb=Identify`
 * `*/oai2?verb=ListMetadataFormats`
 * `*/oai2?verb=ListIdentifiers&metadataPrefix=oai_dc`
-* `*/oai2?verb=GetRecord&metadataPrefix=oai_dc&identifier=PID`
 * `*/oai2?verb=ListRecords&metadataPrefix=oai_dc`
+* `*/oai2?verb=GetRecord&metadataPrefix=oai_dc&identifier=PID`
 
 Services like WorldCat expect links back to the object such as a Handle URL. If your metadata doesn't have this there are two approaches that can be used. Self transforming XSLTs can be used to add specific elements tailored to individual needs. However, there is options in configuration to append on URL values to the XML output of OAI. Each metadata prefix has an individual set of configuration. If selected, a user can define where the object URL will get appended in the output returned.
 
